@@ -18,7 +18,7 @@ define jrockit::installrockit(
   #notify {"installrockit.pp ${title} ${version}":}
   info("installrockit.pp: ${title} ${version}")
 
-  if any2bool($x64) {
+  if str2bool($x64) {
     $type = 'x64'
   } else {
     $type = 'ia32'

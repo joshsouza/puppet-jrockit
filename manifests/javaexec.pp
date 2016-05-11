@@ -80,8 +80,8 @@ define jrockit::javaexec (
             command => "alternatives --install /usr/bin/java java /usr/java/${fullversion}/bin/java 17065",
             require => File['/usr/java/default'],
           }
-          # TODO: Puppet 4 makes any2bool unnecessary
-          if any2bool($setDefault) {
+          # TODO: Puppet 4 makes str2bool unnecessary
+          if str2bool($setDefault) {
             exec { 'default alternatives':
               command => "alternatives --set java /usr/java/${fullversion}/bin/java",
               require => Exec['install alternatives'],
@@ -97,7 +97,7 @@ define jrockit::javaexec (
             require => File['/usr/java/default'],
           }
 
-          if any2bool($setDefault) {
+          if str2bool($setDefault) {
             exec { 'default alternatives':
               command => "update-alternatives --set java /usr/java/${fullversion}/bin/java",
               require => Exec['install alternatives'],
