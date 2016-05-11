@@ -12,7 +12,7 @@ define jrockit::installrockit(
   $jreInstallDir  =  '/usr/java',) {
 
   $fullVersion   =  "jrockit-jdk${version}"
-  $installDir    =  "/usr/java/${fullVersion}"
+  $installDir    =  "${jreInstallDir}/${fullVersion}"
 
   if str2bool($x64) {
     $type = 'x64'
