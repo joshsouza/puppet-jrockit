@@ -14,10 +14,6 @@ define jrockit::installrockit(
   $fullVersion   =  "jrockit-jdk${version}"
   $installDir    =  "/usr/java/${fullVersion}"
 
-  # Don't put notifies in your code, as they are not idempotent from a reporting perspective
-  #notify {"installrockit.pp ${title} ${version}":}
-  info("installrockit.pp: ${title} ${version}")
-
   if str2bool($x64) {
     $type = 'x64'
   } else {

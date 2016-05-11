@@ -1,0 +1,18 @@
+{
+  "name": "joshsouza-jrockit",
+  "version": "0.0.1",
+  "summary": "Oracle JRockit puppet module",
+  "author": "Josh Souza",
+  "description": "Oracle JRockit puppet module",
+  "dependencies": [
+    {
+      "name": "adrien/alternatives",
+      "version_requirement": ">0.3.0"
+    }
+  ],
+  "types": [],
+  "checksums": {},
+  "source": "https://github.com/joshsouza/puppet-jrockit",
+  "project_page": "https://github.com/joshsouza/puppet-jrockit",
+  "license": "GNU 3"
+}
