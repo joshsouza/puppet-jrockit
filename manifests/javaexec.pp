@@ -11,6 +11,7 @@ define jrockit::javaexec (
   $setDefault  = undef,
   $user        = undef,
   $group       = undef,
+  $jreInstallDir = '/usr/java',
 ) {
 
   # install jdk
@@ -18,7 +19,6 @@ define jrockit::javaexec (
     CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
 
       $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-      $javaInstall  = '/usr/java/'
       $silentfile   = "${path}silent${version}.xml"
 
       Exec {
@@ -29,10 +29,10 @@ define jrockit::javaexec (
       }
 
       # check java install folder
-      if ! defined(File[$javaInstall]) {
-        file { $javaInstall :
+      if ! defined(File[$jreInstallDir]) {
+        file { $jreInstallDir :
           ensure => directory,
-          path   => $javaInstall,
+          path   => $jreInstallDir,
           mode   => '0755',
         }
       }
@@ -52,61 +52,39 @@ define jrockit::javaexec (
         cwd       => $path,
         path      => $path,
         logoutput => true,
-        creates   => "/usr/java/${fullversion}",
+        creates   => "${jreInstallDir}/${fullversion}",
         require   => File[$silentfile],
       }
 
       # java link to latest
-      file { '/usr/java/latest':
+      file {  "${jreInstallDir}/latest":
         ensure  => link,
-        target  => "/usr/java/${fullversion}",
+        target  => "${jreInstallDir}/${fullversion}",
         mode    => '0755',
         require => Exec['install jrockit'],
       }
 
       # java link to default
-      file { '/usr/java/default':
+      file { "${jreInstallDir}/default":
         ensure  => link,
-        target  => '/usr/java/latest',
+        target  => "${jreInstallDir}/latest",
         mode    => '0755',
-        require => File['/usr/java/latest'],
+        require => File["${jreInstallDir}/latest"],
       }
 
       # Add to alternatives and set as the default if required
-      case $::operatingsystem {
-        CentOS, RedHat, OracleLinux: {
-          # set the java default
-          exec { 'install alternatives':
-            command => "alternatives --install /usr/bin/java java /usr/java/${fullversion}/bin/java 17065",
-            require => File['/usr/java/default'],
-          }
-          # TODO: Puppet 4 makes str2bool unnecessary
-          if str2bool($setDefault) {
-            exec { 'default alternatives':
-              command => "alternatives --set java /usr/java/${fullversion}/bin/java",
-              require => Exec['install alternatives'],
-            }
-          }
-
-        }
-
-        Ubuntu, Debian:{
-          # set the java default
-          exec { 'install alternatives':
-            command => "update-alternatives --install /usr/bin/java java /usr/java/${fullversion}/bin/java 17065",
-            require => File['/usr/java/default'],
-          }
-
-          if str2bool($setDefault) {
-            exec { 'default alternatives':
-              command => "update-alternatives --set java /usr/java/${fullversion}/bin/java",
-              require => Exec['install alternatives'],
-            }
-          }
-
-        }
-        default: {
-          fail('Attempting to install JRockit on an unsupported OS.')
+      alternative_entry {"${jreInstallDir}/${fullversion}/bin/java":
+        ensure   => present,
+        altlink  => '/usr/bin/java',
+        altname  => 'java',
+        priority => 17065,
+        require  => File["${jreInstallDir}/default"],
+      }
+      if str2bool($setDefault){
+        alternatives {'java':
+          path    => "${jreInstallDir}/${fullversion}/bin/java",
+          require => [File["${jreInstallDir}/default"],Alternative_entry["${jreInstallDir}/${fullversion}/bin/java"]],
+          mode    => 'manual',
         }
       }
     }

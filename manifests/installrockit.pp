@@ -72,13 +72,14 @@ define jrockit::installrockit(
 
   # install on client
   jrockit::javaexec {"jdkexec ${title} ${version}":
-    version     => $version,
-    path        => $downloadDir,
-    fullversion => $fullVersion,
-    jdkfile     => $jdkfile,
-    setDefault  => $setDefault,
-    user        => $user,
-    group       => $group,
-    require     => File["${downloadDir}${jdkfile}"],
+    version       => $version,
+    path          => $downloadDir,
+    fullversion   => $fullVersion,
+    jdkfile       => $jdkfile,
+    setDefault    => $setDefault,
+    user          => $user,
+    group         => $group,
+    jreInstallDir => $jreInstallDir,
+    require       => File["${downloadDir}${jdkfile}"],
   }
 }
