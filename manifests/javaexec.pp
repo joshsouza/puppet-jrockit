@@ -61,7 +61,7 @@ define jrockit::javaexec (
         ensure  => link,
         target  => "/usr/java/${fullversion}",
         mode    => '0755',
-        require => Exec['installjrockit'],
+        require => Exec['install jrockit'],
       }
 
       # java link to default
