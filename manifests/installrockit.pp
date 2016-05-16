@@ -10,6 +10,8 @@ define jrockit::installrockit(
   $installJre     =  true,
   $setDefault     =  true,
   $jreInstallDir  =  '/usr/java',
+  $install_user   =  'root',
+  $install_group  =  'root',
 ) {
 
   $fullVersion   =  "jrockit-jdk${version}"
@@ -25,8 +27,8 @@ define jrockit::installrockit(
     CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
       $installVersion   = 'linux'
       $installExtension = '.bin'
-      $user             = 'root'
-      $group            = 'root'
+      $user             = $install_user
+      $group            = $install_group
     }
     windows: {
       $installVersion   = 'windows'
