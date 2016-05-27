@@ -19,7 +19,7 @@ define jrockit::javaexec (
     CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
 
       $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
-      $silentfile   = "${path}silent${version}.xml"
+      $silentfile   = "${path}/silent${version}.xml"
 
       Exec {
         logoutput   => true,
