@@ -83,6 +83,11 @@ define jrockit::installrockit(
     user          => $user,
     group         => $group,
     jreInstallDir => $jreInstallDir,
+    # These parameters must be passed due to potential scoping issues.
+    installDir    => $installDir,
+    installDemos  => $installDemos,
+    installSource => $installSource,
+    installJre    => $installJre,
     require       => File["${downloadDir}/${jdkfile}"],
   }
 }

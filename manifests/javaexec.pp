@@ -5,12 +5,16 @@
 
 define jrockit::javaexec (
   $version,
-  $path        = undef,
-  $fullversion = undef,
-  $jdkfile     = undef,
-  $setDefault  = undef,
-  $user        = undef,
-  $group       = undef,
+  $path          = undef,
+  $fullversion   = undef,
+  $jdkfile       = undef,
+  $setDefault    = undef,
+  $user          = undef,
+  $group         = undef,
+  $installDemos  = undef,
+  $installSource = undef,
+  $installJre    = undef,
+  $installDir    = undef,
   $jreInstallDir = '/usr/java',
 ) {
 
@@ -37,6 +41,7 @@ define jrockit::javaexec (
         }
       }
 
+      # Variables used: installDir, installDemos, installSource, installJre, jreInstallDir
       # Create the silent install xml
       file { "silent.xml ${version}":
         ensure  => present,
