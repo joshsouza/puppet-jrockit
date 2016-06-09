@@ -1,8 +1,8 @@
 # jrockit::instalrockit
 
 define jrockit::installrockit (
-  $version        = undef,
-  $x64            = undef,
+  $version,
+  $x64            = true,
   $downloadDir    = '/install',
   $puppetMountDir = undef,
   $installDemos   = false,

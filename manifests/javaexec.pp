@@ -17,7 +17,6 @@ define jrockit::javaexec (
   $installDir    = undef,
   $jreInstallDir = '/usr/java',
 ) {
-
   # install jdk
   case $::operatingsystem {
     'CentOS', 'RedHat', 'OracleLinux', 'Ubuntu', 'Debian': {

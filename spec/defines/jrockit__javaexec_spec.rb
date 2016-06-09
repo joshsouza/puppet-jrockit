@@ -11,7 +11,10 @@ describe 'jrockit::javaexec' do
         end
 
         context 'without any parameters' do
-#          it { is_expected.to compile.and_raise_error(/error message match/) }
+          let(:title) { 'fail intentionally' }
+          it do
+            expect { is_expected.to contain_jrockit__javaexec('fail intentionally') }.to raise_error(Puppet::Error, /Must pass version to Jrockit::Javaexec/)
+          end
         end
         context 'with sane defaults' do
           let(:title) { 'jdkexec 1.6.0_45-R28.2.7-4.1.0 1.6.0_45-R28.2.7-4.1.0' }
