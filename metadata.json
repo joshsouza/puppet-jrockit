@@ -10,9 +10,31 @@
       "version_requirement": ">0.3.0"
     }
   ],
-  "types": [],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ],
   "checksums": {},
   "source": "https://github.com/joshsouza/puppet-jrockit",
   "project_page": "https://github.com/joshsouza/puppet-jrockit",
-  "license": "GNU 3"
+  "license": "GPL-3.0"
 }

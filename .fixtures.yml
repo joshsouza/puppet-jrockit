@@ -1,0 +1,7 @@
+fixtures:
+  forge_modules:
+    stdlib: "puppetlabs/stdlib"
+  repositories:
+    alternatives: "https://github.com/voxpupuli/puppet-alternatives.git"
+  symlinks:
+    jrockit: "#{source_dir}"

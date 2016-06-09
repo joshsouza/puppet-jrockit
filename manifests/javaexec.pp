@@ -20,7 +20,7 @@ define jrockit::javaexec (
 
   # install jdk
   case $::operatingsystem {
-    CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
+    'CentOS', 'RedHat', 'OracleLinux', 'Ubuntu', 'Debian': {
 
       $execPath     = '/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:'
       $silentfile   = "${path}/silent${version}.xml"
@@ -34,7 +34,7 @@ define jrockit::javaexec (
 
       # check java install folder
       if ! defined(File[$jreInstallDir]) {
-        file { $jreInstallDir :
+        file { $jreInstallDir:
           ensure => directory,
           path   => $jreInstallDir,
           mode   => '0755',
@@ -43,15 +43,15 @@ define jrockit::javaexec (
 
       # Variables used: installDir, installDemos, installSource, installJre, jreInstallDir
       # Create the silent install xml
-      file { "silent.xml ${version}":
+      file { $silentfile:
         ensure  => present,
         path    => $silentfile,
         replace => true,
         content => template('jrockit/jrockit-silent.xml.erb'),
-        require => File[$path],
+        require => File[$jreInstallDir],
       }
 
-      # Do the installation but only if the directry doesn't exist
+      # Do the installation but only if the directory doesn't exist
       exec { 'install jrockit':
         command   => "${jdkfile} -mode=silent -silent_xml=${silentfile}",
         cwd       => $path,
@@ -62,7 +62,7 @@ define jrockit::javaexec (
       }
 
       # java link to latest
-      file {  "${jreInstallDir}/latest":
+      file { "${jreInstallDir}/latest":
         ensure  => link,
         target  => "${jreInstallDir}/${fullversion}",
         mode    => '0755',
@@ -78,7 +78,7 @@ define jrockit::javaexec (
       }
 
       # Add to alternatives and set as the default if required
-      alternative_entry {"${jreInstallDir}/${fullversion}/bin/java":
+      alternative_entry { "${jreInstallDir}/${fullversion}/bin/java":
         ensure   => present,
         altlink  => '/usr/bin/java',
         altname  => 'java',
@@ -86,10 +86,12 @@ define jrockit::javaexec (
         require  => File["${jreInstallDir}/default"],
       }
       if str2bool($setDefault){
-        alternatives {'java':
+        alternatives { 'java':
           path    => "${jreInstallDir}/${fullversion}/bin/java",
-          require => [File["${jreInstallDir}/default"],Alternative_entry["${jreInstallDir}/${fullversion}/bin/java"]],
           mode    => 'manual',
+          require => [File["${jreInstallDir}/default"],
+                      Alternative_entry["${jreInstallDir}/${fullversion}/bin/java"],
+                      ],
         }
       }
     }
