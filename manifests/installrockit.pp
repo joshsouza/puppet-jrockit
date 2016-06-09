@@ -1,21 +1,21 @@
 # jrockit::instalrockit
 
-define jrockit::installrockit(
-  $version        =  undef ,
-  $x64            =  undef,
-  $downloadDir    =  '/install',
-  $puppetMountDir =  undef,
-  $installDemos   =  false,
-  $installSource  =  false,
-  $installJre     =  true,
-  $setDefault     =  true,
-  $jreInstallDir  =  '/usr/java',
-  $install_user   =  'root',
-  $install_group  =  'root',
+define jrockit::installrockit (
+  $version        = undef,
+  $x64            = undef,
+  $downloadDir    = '/install',
+  $puppetMountDir = undef,
+  $installDemos   = false,
+  $installSource  = false,
+  $installJre     = true,
+  $setDefault     = true,
+  $jreInstallDir  = '/usr/java',
+  $install_user   = 'root',
+  $install_group  = 'root',
 ) {
 
-  $fullVersion   =  "jrockit-jdk${version}"
-  $installDir    =  "${jreInstallDir}/${fullVersion}"
+  $fullVersion = "jrockit-jdk${version}"
+  $installDir  = "${jreInstallDir}/${fullVersion}"
 
   if str2bool($x64) {
     $type = 'x64'
@@ -24,13 +24,13 @@ define jrockit::installrockit(
   }
 
   case $::operatingsystem {
-    CentOS, RedHat, OracleLinux, Ubuntu, Debian: {
+    'CentOS', 'RedHat', 'OracleLinux', 'Ubuntu', 'Debian': {
       $installVersion   = 'linux'
       $installExtension = '.bin'
       $user             = $install_user
       $group            = $install_group
     }
-    windows: {
+    'windows': {
       $installVersion   = 'windows'
       $installExtension = '.exe'
     }
@@ -39,7 +39,7 @@ define jrockit::installrockit(
     }
   }
 
-  $jdkfile =  "jrockit-jdk${version}-${installVersion}-${type}${installExtension}"
+  $jdkfile = "jrockit-jdk${version}-${installVersion}-${type}${installExtension}"
 
   File {
     replace => false,
@@ -61,10 +61,9 @@ define jrockit::installrockit(
       $mountDir = $puppetMountDir
     }
 
-
   # download jdk to client
   if ! defined(File["${downloadDir}/${jdkfile}"]) {
-    file {"${downloadDir}${jdkfile}":
+    file { "${downloadDir}/${jdkfile}":
       ensure  => present,
       path    => "${downloadDir}/${jdkfile}",
       source  => "${mountDir}/${jdkfile}",
